@@ -25,12 +25,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-wp#mvcsxk$@h!$d92)9z(6jmj94q#y&wcekt9o7=8eqpl$i@6r'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["https://web-production-04061.up.railway.app","127.0.0.1", "localhost"]
 
 AUTH_USER_MODEL = "api.User"
 
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 # Application definition
 
@@ -66,11 +69,12 @@ ROOT_URLCONF = 'backend.urls'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':[
         "rest_framework_simplejwt.authentication.JWTAuthentication"
-    ],
-    
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
-    "PAGE_SIZE": 5
+    ]
 }
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://web-production-04061.up.railway.app",
+]
 
 
 SIMPLE_JWT = {
