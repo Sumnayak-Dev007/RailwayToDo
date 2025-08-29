@@ -106,7 +106,12 @@ SIMPLE_JWT = {
 }
 
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True  
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+   
+]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://web-production-04061.up.railway.app",
