@@ -110,7 +110,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "https://smartodoapp.netlify.app/",
+    "https://smartodoapp.netlify.app",
    
 ]
 
