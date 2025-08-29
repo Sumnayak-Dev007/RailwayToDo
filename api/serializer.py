@@ -19,6 +19,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['full_name'] = user.profile.full_name
         token['username'] = user.username
         token['email'] = user.email
+        token['role'] = 'admin' if user.is_staff else 'user'
         token['bio'] = user.profile.bio
         token['image'] = str(user.profile.image)
         token['verified'] = user.profile.verified
