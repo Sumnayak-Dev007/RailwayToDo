@@ -38,14 +38,16 @@ def getRoutes(request):
 @permission_classes([IsAuthenticated])
 def testEndPoint(request):
     if request.method == 'GET':
-        data = f"Congratulation {request.user}, your API just responded to GET request"
-        return Response({'response': data}, status=status.HTTP_200_OK)
+        # Get all users and return their usernames
+        users = User.objects.all().values('id', 'username', 'email')
+        return Response(users, status=status.HTTP_200_OK)
+
     elif request.method == 'POST':
         text = "Hello Buddy!"
-        data = f'Congratulation your API just responded to POST request with text: {text}'
+        data = f'Congratulations! Your API just responded to POST request with text: {text}'
         return Response({'response': data}, status=status.HTTP_200_OK)
-    return Response({}, status.HTTP_400_BAD_REQUEST)
 
+    return Response({}, status=status.HTTP_400_BAD_REQUEST)
 
 class TodoListView(generics.ListCreateAPIView):
     queryset = Todo.objects.all()
