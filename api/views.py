@@ -35,7 +35,7 @@ class MyTokenObtainPairView(TokenObtainPairView):
             key="access",
             value=access_token,
             httponly=True,
-            secure=True,       # only over HTTPS in production
+            secure=False,       # only over HTTPS in production
             samesite="None", # CSRF protection
             max_age=60 * 5     # match access token lifetime
         )
@@ -43,7 +43,7 @@ class MyTokenObtainPairView(TokenObtainPairView):
             key="refresh",
             value=refresh_token,
             httponly=True,
-            secure=True,
+            secure=False,
             samesite="None",
             max_age=60 * 60 * 24 * 7  # match refresh token lifetime
         )
@@ -55,19 +55,23 @@ class CookieTokenRefreshView(TokenRefreshView):
     serializer_class = CookieTokenRefreshSerializer
 
     def finalize_response(self, request, response, *args, **kwargs):
-        # if new refresh is returned, set it in the cookie
+        # Let DRF build the response first
+        response = super().finalize_response(request, response, *args, **kwargs)
+
+        # After DRF built the response, check if refresh is in it
         refresh = response.data.get("refresh")
         if refresh:
             response.set_cookie(
                 key="refresh",
                 value=refresh,
                 httponly=True,
-                secure=True,     # only over HTTPS
-                samesite="None"  # use "Lax" if frontend & backend share same site
+                secure=False,     # True if using HTTPS
+                samesite="None"  # "Lax" if frontend/backend same site
             )
-            # optionally hide refresh from body if you want it only in cookies
+            # Optionally hide refresh from body
             del response.data["refresh"]
-        return super().finalize_response(request, response, *args, **kwargs)
+
+        return response
 
 
 class RegisterView(generics.CreateAPIView):
