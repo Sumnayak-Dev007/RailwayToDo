@@ -116,6 +116,8 @@ CORS_ALLOWED_ORIGINS = [
 
 CSRF_TRUSTED_ORIGINS = [
     "https://web-production-04061.up.railway.app",
+    "http://localhost:3000",
+    "https://smartodoapp.netlify.app",
 ]
 
 CSRF_COOKIE_SECURE = True
