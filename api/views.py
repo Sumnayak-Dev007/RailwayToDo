@@ -54,6 +54,21 @@ class MyTokenObtainPairView(TokenObtainPairView):
 class CookieTokenRefreshView(TokenRefreshView):
     serializer_class = CookieTokenRefreshSerializer
 
+    def finalize_response(self, request, response, *args, **kwargs):
+        # if new refresh is returned, set it in the cookie
+        refresh = response.data.get("refresh")
+        if refresh:
+            response.set_cookie(
+                key="refresh",
+                value=refresh,
+                httponly=True,
+                secure=True,     # only over HTTPS
+                samesite="None"  # use "Lax" if frontend & backend share same site
+            )
+            # optionally hide refresh from body if you want it only in cookies
+            del response.data["refresh"]
+        return super().finalize_response(request, response, *args, **kwargs)
+
 
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
