@@ -36,7 +36,7 @@ class MyTokenObtainPairView(TokenObtainPairView):
             value=access_token,
             httponly=True,
             secure=True,       # only over HTTPS in production
-            samesite="Strict", # CSRF protection
+            samesite="None", # CSRF protection
             max_age=60 * 5     # match access token lifetime
         )
         response.set_cookie(
@@ -44,7 +44,7 @@ class MyTokenObtainPairView(TokenObtainPairView):
             value=refresh_token,
             httponly=True,
             secure=True,
-            samesite="Strict",
+            samesite="None",
             max_age=60 * 60 * 24 * 7  # match refresh token lifetime
         )
 
