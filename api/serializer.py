@@ -27,22 +27,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # ...
         return token
 
-class CookieTokenRefreshSerializer(TokenRefreshSerializer):
-    refresh = serializers.CharField(required=False)  # make it optional
 
-    def validate(self, attrs):
-        refresh = attrs.get("refresh")
-
-        # If not passed in body, check cookies
-        request = self.context["request"]
-        if refresh is None:
-            refresh = request.COOKIES.get("refresh")
-
-        if refresh is None:
-            raise serializers.ValidationError("No refresh token provided.")
-
-        attrs["refresh"] = refresh
-        return super().validate(attrs)
 
 
 class RegisterSerializer(serializers.ModelSerializer):

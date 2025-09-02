@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from api.models import User,Todo
 
-from api.serializer import MyTokenObtainPairSerializer, RegisterSerializer,TodoSerializer,CookieTokenRefreshSerializer
+from api.serializer import MyTokenObtainPairSerializer, RegisterSerializer,TodoSerializer
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -17,44 +17,6 @@ from rest_framework_simplejwt.views import TokenRefreshView
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        
-        tokens = serializer.validated_data
-        access_token = tokens.get("access")
-        refresh_token = tokens.get("refresh")
-
-        response = Response({
-            "message": "Login successful",
-            "user": serializer.user.username,
-        }, status=status.HTTP_200_OK)
-
-        # Set HttpOnly cookies
-        response.set_cookie(
-            key="access",
-            value=access_token,
-            httponly=True,
-            secure=False,       # only over HTTPS in production
-            samesite="Lax", # CSRF protection
-            max_age=60 * 5     # match access token lifetime
-        )
-        response.set_cookie(
-            key="refresh",
-            value=refresh_token,
-            httponly=True,
-            secure=False,
-            samesite="Lax",
-            max_age=60 * 60 * 24 * 7  # match refresh token lifetime
-        )
-
-        return response
-
-
-class CookieTokenRefreshView(TokenRefreshView):
-    serializer_class = CookieTokenRefreshSerializer
-
-    
 
 
 class RegisterView(generics.CreateAPIView):
